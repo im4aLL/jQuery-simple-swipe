@@ -33,15 +33,6 @@
     }
 
     Plugin.prototype.init = function () {
-        window.requestAnimFrame = (function(){
-          return  window.requestAnimationFrame       ||
-                  window.webkitRequestAnimationFrame ||
-                  window.mozRequestAnimationFrame    ||
-                  function( callback ){
-                    window.setTimeout(callback, 1000 / 60);
-                  };
-        })();
-
         var _this = this;
         $(_this.element).addClass(_this.options.dragClass);
 
@@ -117,10 +108,8 @@
             var x = _this.options.moveX ? move.x : 0;
             var y = _this.options.moveY ? move.y : 0;
 
-            requestAnimFrame(function(){
-                $dragableItem.css('transform', 'translate('+x+'px, '+y+'px)');
-                _this.__.animating = false;
-            });
+            $dragableItem.css('transform', 'translate('+x+'px, '+y+'px)');
+            _this.__.animating = false;
         }
     };
 
@@ -151,17 +140,17 @@
             yDiff : _this.__.mouse.end.yPos - _this.__.mouse.start.yPos
         };
 
-        if(typeof _this.options.onComplete == 'function') {
-            var swipeType = _this.getEventName();
-            _this.options.onComplete.call(this, swipeType);
-        }
-
         _this.__.dragging = false;
         if(_this.options.move === true && _this.options.moveBack === true) {
             $dragableItem.css('transform', 'translate('+_this.__.initial.tX+'px, '+_this.__.initial.tY+'px)');
         }
         
         $dragableItem.removeClass(_this.options.draggingClass);
+
+        if(typeof _this.options.onComplete == 'function') {
+            var swipeType = _this.getEventName();
+            _this.options.onComplete.call(this, swipeType);
+        }
     };
 
     Plugin.prototype.getEventName = function(){
