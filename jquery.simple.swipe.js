@@ -9,7 +9,8 @@
             move: true,
             moveX: true,
             moveY: true,
-            onComplete: function(){}
+            onComplete: function(){},
+            moveBack: false
         };
 
     var __ = {
@@ -146,7 +147,7 @@
         }
 
         _this.__.dragging = false;
-        if(_this.options.move === true) {
+        if(_this.options.move === true && _this.options.moveBack === true) {
             $dragableItem.css('transform', 'translate(0, 0)');
         }
         
