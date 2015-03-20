@@ -3,7 +3,11 @@
 
 ### Usage:
 ```javascript
-$('.selector').simpleSwipe();
+$('.selector').simpleSwipe({
+    onComplete: function(direction){
+        console.log(direction); // left | right | up | down
+    }
+});
 ```
 
 ### Options:
