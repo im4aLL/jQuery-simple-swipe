@@ -89,8 +89,8 @@
             };
 
             _this.__.mouse.end = {
-                xPos : move.x,
-                yPos : move.y
+                xPos : event.pageX,
+                yPos : event.pageY
             };
 
             _this.swiping(move);
