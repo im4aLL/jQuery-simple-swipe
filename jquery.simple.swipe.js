@@ -1,3 +1,7 @@
+/**
+ * https://github.com/im4aLL/jQuery-simple-swipe
+ * @version 1.0
+ */
 ;(function ( $, window, document, undefined ) {
     'use strict';
     
@@ -147,7 +151,7 @@
         
         $dragableItem.removeClass(_this.options.draggingClass);
 
-        if(typeof _this.options.onComplete == 'function') {
+        if(typeof _this.options.onComplete === 'function') {
             var swipeType = _this.getEventName();
             _this.options.onComplete.call(this, swipeType);
         }
