@@ -10,6 +10,11 @@ $('.selector').simpleSwipe({
 });
 ```
 
+### Using bower?
+```
+bower install simple-swipe --save-dev
+```
+
 ### Options:
 ```javascript
 draggingClass:      'is-dragging',
