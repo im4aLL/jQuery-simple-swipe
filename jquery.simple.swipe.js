@@ -7,6 +7,8 @@
             draggingClass: 'is-dragging',
             dragClass: 'is-draggable',
             move: true,
+            moveX: true,
+            moveY: true,
             onComplete: function(){}
         };
 
@@ -42,10 +44,15 @@
         var _this = this;
         $(_this.element).addClass(_this.options.dragClass);
 
-        $(_this.element).bind('mousedown',  function(event){ _this.dragStart(event); });
-        $(_this.element).bind('mousemove',  function(event){ _this.dragging(event); });
-        $(_this.element).bind('mouseup',    function(event){ _this.dragEnd(event); });
-        $('html').bind('mouseup',           function(event){ _this.dragEnd(event); });
+        $(_this.element).bind('mousedown',      function(event){ _this.dragStart(event); });
+        $(_this.element).bind('mousemove',      function(event){ _this.dragging(event); });
+        $(_this.element).bind('mouseup',        function(event){ _this.dragEnd(event); });
+        $('html').bind('mouseup',               function(event){ _this.dragEnd(event); });
+
+        $(_this.element).bind('touchstart',     function(event){ event = event.originalEvent.touches[0]; _this.dragStart(event); });
+        $(_this.element).bind('touchmove',      function(event){ event = event.originalEvent.touches[0]; _this.dragging(event); });
+        $(_this.element).bind('touchend',       function(event){ event = event.originalEvent.touches[0]; _this.dragEnd(event); });
+        $('html').bind('touchend',              function(event){ event = event.originalEvent.touches[0]; _this.dragEnd(event); });
     };
 
     Plugin.prototype.dragStart = function(event){
@@ -75,10 +82,15 @@
     Plugin.prototype.dragging = function(event){
         var _this = this;
         
-        if(_this.__.dragging === true && _this.options.move === true) {
+        if(_this.__.dragging === true) {
             var move = {
                 x : event.pageX - _this.__.mouse.start.xPos,
                 y : event.pageY - _this.__.mouse.start.yPos
+            };
+
+            _this.__.mouse.end = {
+                xPos : move.x,
+                yPos : move.y
             };
 
             _this.swiping(move);
@@ -89,9 +101,13 @@
         var _this = this;
         var $dragableItem = $(_this.element);
 
-        if(_this.__.animating === false){
+        if(_this.__.animating === false && _this.options.move === true){
+
+            var x = _this.options.moveX ? move.x : 0;
+            var y = _this.options.moveY ? move.y : 0;
+
             requestAnimFrame(function(){
-                $dragableItem.css('transform', 'translate('+move.x+'px, '+move.y+'px)');
+                $dragableItem.css('transform', 'translate('+x+'px, '+y+'px)');
                 _this.__.animating = false;
             });
         }
@@ -100,10 +116,12 @@
     Plugin.prototype.dragEnd = function(event){
         var _this = this;
 
-        _this.__.mouse.end = {
-            xPos : event.pageX,
-            yPos : event.pageY
-        };
+        if(typeof event !== 'undefined') {
+            _this.__.mouse.end = {
+                xPos : event.pageX,
+                yPos : event.pageY
+            };
+        }
 
         _this.swipeEnd();
     };
@@ -123,7 +141,8 @@
         };
 
         if(typeof _this.options.onComplete == 'function') {
-            _this.options.onComplete.call(this, _this.__.diff);
+            var swipeType = _this.getEventName();
+            _this.options.onComplete.call(this, swipeType);
         }
 
         _this.__.dragging = false;
@@ -132,6 +151,34 @@
         }
         
         $dragableItem.removeClass(_this.options.draggingClass);
+    };
+
+    Plugin.prototype.getEventName = function(){
+        var _this = this;
+        var diff = _this.__.diff;
+
+        if(Math.abs(diff.xDiff) > Math.abs(diff.yDiff)) {
+            if(diff.xDiff > 0) {
+                return 'right';
+            }
+            else if(diff.xDiff < 0) {
+                return 'left';
+            }
+            else {
+                return 'no';
+            }
+        }
+        else {
+            if(diff.yDiff > 0) {
+                return 'down';
+            }
+            else if(diff.yDiff < 0) {
+                return 'up';
+            }
+            else {
+                return 'no';
+            }
+        }
     };
 
 

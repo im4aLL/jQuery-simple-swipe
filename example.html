@@ -21,9 +21,8 @@
     <script>
         jQuery(document).ready(function($) {
             $('.box').simpleSwipe({
-                move: true,
-                onComplete: function(response){
-                    console.log(response);
+                onComplete: function(direction){
+                    console.log(direction);
                 }
             });
         });
