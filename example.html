@@ -8,8 +8,19 @@
         * { margin: 0; padding: 0 }
         .box { width: 100px; height: 100px; background: tomato; margin: 100px; }
 
-        .is-draggable { transition: transform 250ms ease-in; }
-        .is-dragging { transition-property: none; }
+        .is-draggable { 
+            transition: transform 250ms ease-in; 
+        }
+
+        .is-dragging { 
+            transition-property: none !important;
+            cursor: move !important;
+            
+            -webkit-user-select: none;  
+            -moz-user-select: none;    
+            -ms-user-select: none;      
+            user-select: none;
+        }
     </style>
 </head>
 <body>

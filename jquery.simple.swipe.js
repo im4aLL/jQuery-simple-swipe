@@ -71,10 +71,20 @@
         var _this = this;
         var $dragableItem = $(_this.element);
 
-        _this.__.initial = {
-            xPos : $dragableItem.offset().left,
-            yPos : $dragableItem.offset().top
-        };
+        var getTransform = $dragableItem.css('transform');
+        if(getTransform !== 'none') {
+            getTransform = getTransform.match(/(-?[0-9\.]+)/g);
+
+            _this.__.initial.tX = parseInt(getTransform[4], 10);
+            _this.__.initial.tY = parseInt(getTransform[5], 10);
+        }
+        else {
+            _this.__.initial.tX = 0;
+            _this.__.initial.tY = 0;
+        }
+
+        _this.__.initial.xPos = $dragableItem.offset().left;
+        _this.__.initial.yPos = $dragableItem.offset().top;
         
         _this.__.dragging = true;
         $dragableItem.addClass(_this.options.draggingClass);
@@ -85,8 +95,8 @@
         
         if(_this.__.dragging === true) {
             var move = {
-                x : event.pageX - _this.__.mouse.start.xPos,
-                y : event.pageY - _this.__.mouse.start.yPos
+                x : event.pageX - _this.__.mouse.start.xPos + _this.__.initial.tX,
+                y : event.pageY - _this.__.mouse.start.yPos + _this.__.initial.tY
             };
 
             _this.__.mouse.end = {
@@ -148,7 +158,7 @@
 
         _this.__.dragging = false;
         if(_this.options.move === true && _this.options.moveBack === true) {
-            $dragableItem.css('transform', 'translate(0, 0)');
+            $dragableItem.css('transform', 'translate('+_this.__.initial.tX+'px, '+_this.__.initial.tY+'px)');
         }
         
         $dragableItem.removeClass(_this.options.draggingClass);
