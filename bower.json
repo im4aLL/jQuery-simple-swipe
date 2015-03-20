@@ -1,0 +1,22 @@
+{
+  "name": "jQuery simple swipe",
+  "version": "v1.0.0",
+  "homepage": "https://github.com/im4aLL/jQuery-simple-swipe",
+  "authors": [
+    "Hadi <me@habibhadi.com>"
+  ],
+  "description": "A simple swipe event using jQuery",
+  "main": "jquery.simple.swipe.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "swipe",
+    "simple",
+    "swipe",
+    "event",
+    "jQuery",
+    "swipe"
+  ],
+  "license": "MIT"
+}
