@@ -10,6 +10,9 @@ $('.selector').simpleSwipe({
 });
 ```
 
+### Demo:
+[http://habibhadi.com/lab/jQuery-simple-swipe/](http://habibhadi.com/lab/jQuery-simple-swipe/)
+
 ### Using bower?
 ```
 bower install simple-swipe --save-dev
@@ -81,16 +84,16 @@ $('.selector').simpleSwipe({
 
 ### For animate use following css:
 ```css
-.is-draggable { 
-    transition: transform 250ms ease-in; 
+.is-draggable {
+    transition: transform 250ms ease-in;
 }
 
-.is-dragging { 
+.is-dragging {
     transition-property: none !important;
     cursor: move !important;
-    -webkit-user-select: none;  
-    -moz-user-select: none;    
-    -ms-user-select: none;      
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 ```
