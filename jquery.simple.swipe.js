@@ -112,6 +112,17 @@
             var x = _this.options.moveX ? move.x : 0;
             var y = _this.options.moveY ? move.y : 0;
 
+            if(_this.options.moveY === false) {
+                var diff = {
+                    x : _this.__.mouse.end.xPos - _this.__.mouse.start.xPos,
+                    y : _this.__.mouse.end.yPos - _this.__.mouse.start.yPos
+                };
+
+                if(Math.abs(diff.y) > Math.abs(diff.x)) {
+                    return;
+                }
+            }
+
             $dragableItem.css('transform', 'translate('+x+'px, '+y+'px)');
             _this.__.animating = false;
         }
