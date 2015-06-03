@@ -22,8 +22,18 @@
         mouse : {},
         diff : {},
         dragging : false,
-        animating : false
+        animating : false,
+        swipeDirection : null
     };
+
+    window.requestAnimFrame = (function(){
+        return  window.requestAnimationFrame       ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame    ||
+                function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+        };
+    })();
 
     function Plugin( element, options ) {
         this.element = element;
@@ -112,19 +122,30 @@
             var x = _this.options.moveX ? move.x : 0;
             var y = _this.options.moveY ? move.y : 0;
 
+            
             if(_this.options.moveY === false) {
                 var diff = {
                     x : _this.__.mouse.end.xPos - _this.__.mouse.start.xPos,
                     y : _this.__.mouse.end.yPos - _this.__.mouse.start.yPos
                 };
 
-                if(Math.abs(diff.y) > Math.abs(diff.x)) {
+                diff.x = Math.abs(diff.x);
+                diff.y = Math.abs(diff.y);
+
+                if(diff.y - diff.x > 0 && _this.__.swipeDirection === null) {
+                    _this.__.swipeDirection = 'updown';
+                }
+
+                if(_this.__.swipeDirection == 'updown') {
                     return;
                 }
             }
 
-            $dragableItem.css('transform', 'translate('+x+'px, '+y+'px)');
-            _this.__.animating = false;
+            requestAnimFrame(function(){
+                $dragableItem.css('transform', 'translate('+x+'px, '+y+'px)');
+                _this.__.animating = false;
+            });
+            
         }
     };
 
@@ -172,6 +193,14 @@
         var _this = this;
         var diff = _this.__.diff;
 
+        if(_this.options.moveY === false && _this.__.swipeDirection == 'updown') {
+            _this.__.swipeDirection = null;
+            return 'no';
+        }
+
+        _this.__.swipeDirection = null;
+
+
         if(Math.abs(diff.xDiff) > Math.abs(diff.yDiff)) {
             if(diff.xDiff > 0) {
                 return 'right';
@@ -194,6 +223,7 @@
                 return 'no';
             }
         }
+
     };
 
 
